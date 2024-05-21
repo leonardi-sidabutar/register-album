@@ -14,9 +14,8 @@ use App\Http\Controllers\RegisterController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/register',[RegisterController::class,'index'])->name('register_form');
+Route::get('/',[RegisterController::class,'index'])->name('register_form');
 Route::post('registration',[RegisterController::class,'registration'])->name('register.post');
+
+Route::get('/login',[RegisterController::class,'login'])->name('login_form');
+Route::post('/login_act',[RegisterController::class,'login_act'])->name('login_act.post');

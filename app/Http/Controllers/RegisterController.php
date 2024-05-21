@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Model_Register;
 use App\Models\Model_Kebun;
+use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RegisterController extends Controller
@@ -39,7 +40,7 @@ class RegisterController extends Controller
             'nik_sap'=>strtoupper($request->sap),
             'fullname'=>strtoupper($request->name),
             'username'=>strtoupper($request->username),
-            'password'=>password_hash($request->password,PASSWORD_BCRYPT),
+            'password'=>Hash::make($request->password),
             'nickname'=>strtoupper($request->name),
             'company_code'=>strtoupper($request->company_code),
             'kebun'=>strtoupper($request->slicekebun),
@@ -60,5 +61,26 @@ class RegisterController extends Controller
 
 
         return redirect()->route('register_form');
+    }
+
+    public function login(){
+        return view('register/login');
+    }
+
+    public function login_act(Request $request){
+        $request->validate([
+            'username'=>'required',
+            'password'=>'required',
+        ]);
+
+        $username = Model_Register::where('username',$request->input('username'))->first();
+
+        // Check Apakah usernamenya ada
+        if($username && Hash::check($request->input('password'),$username->password)){
+            echo "Berhasil Login";
+        }else{
+            echo "Gagal Login";
+        }
+
     }
 }
